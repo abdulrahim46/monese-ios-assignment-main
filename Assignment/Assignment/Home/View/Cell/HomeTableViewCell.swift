@@ -37,6 +37,6 @@ final class HomeTableViewCell: UITableViewCell {
     /// Configuring the view with data
     func configure(launch: Launch) {
         self.label.text = launch.name
-        self.time.text = launch.time
+        self.time.text = launch.time?.dateOnly(date: launch.time ?? "")
     }
 }

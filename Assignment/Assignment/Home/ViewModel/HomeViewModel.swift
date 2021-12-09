@@ -25,7 +25,9 @@ class HomeViewModel {
                 self?.launches = launches
             case .failure(let error):
                 completion(nil, error)
-                AlertBuilder.failureAlertWithMessage(message: error.localizedDescription)
+                DispatchQueue.main.async {
+                    AlertBuilder.failureAlertWithMessage(message: error.localizedDescription)
+                }
             }
         }
     }

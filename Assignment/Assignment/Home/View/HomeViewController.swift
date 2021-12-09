@@ -4,10 +4,10 @@ class HomeViewController: UIViewController {
     
     //MARK: view & properties
     
-    // var presenter: HomePresenterInput?
     private let tableView = UITableView()
     private var launches: [Launch] = []
     private var viewModel = HomeViewModel()
+    private(set) var loadingIndicator = UIActivityIndicatorView(style: .medium)
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -21,7 +21,7 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         view.backgroundColor = .white
-        //presenter?.viewDidLoad()
+        setupActivityLoader()
         configureTableView()
         fetchAllLaunches()
     }
@@ -45,12 +45,27 @@ class HomeViewController: UIViewController {
         ])
     }
     
+    // setting activity indicator here
+    private func setupActivityLoader() {
+        loadingIndicator.hidesWhenStopped = true
+        loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(loadingIndicator)
+        loadingIndicator.startAnimating()
+        NSLayoutConstraint.activate([
+            loadingIndicator.topAnchor.constraint(equalTo: view.topAnchor),
+            loadingIndicator.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ])
+    }
+    
     //MARK: fetching data from view model
+    
     private func fetchAllLaunches() {
         viewModel.getAllLaunches(completion: { [weak self] response, err in
             DispatchQueue.main.async {
                 self?.tableView.reloadData()
                 self?.tableView.isHidden = false
+                self?.loadingIndicator.stopAnimating()
             }
         })
     }
@@ -78,7 +93,7 @@ extension HomeViewController: UITableViewDataSource {
 extension HomeViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // presenter?.selectedLaunch(flightNumber: launches[indexPath.row].flightNumber)
+        
     }
     
     // tableview height for row
