@@ -2,6 +2,7 @@ import UIKit
 
 final class HomeTableViewCell: UITableViewCell {
 
+    // view & properties
     private let label = UILabel()
     private let time = UILabel()
 
@@ -15,6 +16,7 @@ final class HomeTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // setting the view here
     private func configureSubview() {
         label.numberOfLines = 0
         time.numberOfLines = 0
@@ -32,8 +34,9 @@ final class HomeTableViewCell: UITableViewCell {
         ])
     }
 
-    func update(label: String, time: String) {
-        self.label.text = label
-        self.time.text = time
+    /// Configuring the view with data
+    func configure(launch: Launch) {
+        self.label.text = launch.name
+        self.time.text = launch.time
     }
 }
