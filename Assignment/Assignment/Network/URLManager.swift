@@ -10,12 +10,12 @@ import Foundation
 struct URLManager {
     
     static let kBaseURL = "https://api.spacexdata.com"
-    static let kGetMobiles = "/v4/"
+    static let kAPIVersion = "/v4/"
     
     static func getUrlString(for serviceEnum: ServiceURLType)-> String {
         switch serviceEnum {
         case .launches:
-            return kBaseURL + "launches"
+            return kBaseURL + kAPIVersion + "launches"
         }
     }
     
