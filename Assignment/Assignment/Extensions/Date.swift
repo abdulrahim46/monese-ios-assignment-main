@@ -11,7 +11,7 @@ extension String {
     func dateOnly(date: String) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-        dateFormatter.dateFormat = "yyyy-MM-dd"
+        dateFormatter.dateFormat = "MM-dd-yyyy"
         let date1 = dateFormatter.date(from: date)
         return "\(date1 ?? Date())"
     }

@@ -10,6 +10,7 @@ final class HomeTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .blue
         configureSubview()
+        setOpaqueBackground()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -38,5 +39,14 @@ final class HomeTableViewCell: UITableViewCell {
     func configure(launch: Launch) {
         self.label.text = launch.name
         self.time.text = launch.time?.dateOnly(date: launch.time ?? "")
+    }
+}
+
+private extension HomeTableViewCell {
+    static let defaultBackgroundColor = UIColor.white
+
+    func setOpaqueBackground() {
+        alpha = 1.0
+        backgroundColor = .white
     }
 }
