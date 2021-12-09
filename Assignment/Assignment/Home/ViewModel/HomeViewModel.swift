@@ -9,24 +9,26 @@ import Foundation
 
 class HomeViewModel {
     
-    var mobiles: [Launch]?
+    var launches: [Launch]?
     var apiResource: DataProvider
     
     init(apiResource: DataProvider = NetworkManager()) {
         self.apiResource = apiResource
-        //getAllLaunches()
+        getAllLaunches(completion: { [weak self] response, err  in
+            self?.launches = response
+        })
     }
     
     //MARK: fetch all launches from server
     func getAllLaunches(completion: @escaping ([Launch]?, Error?) -> Void) {
         apiResource.request(urlName: .launches, expecting: [Launch].self) { [weak self] result in
             switch result {
-            case .success(let mobiles):
-                completion(mobiles, nil)
-                self?.mobiles = mobiles
+            case .success(let launches):
+                completion(launches, nil)
+                self?.launches = launches
             case .failure(let error):
                 completion(nil,error)
-                //AlertBuilder.failureAlertWithMessage(message: error.localizedDescription)
+                AlertBuilder.failureAlertWithMessage(message: error.localizedDescription)
             }
         }
     }

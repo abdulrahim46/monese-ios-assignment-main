@@ -5,6 +5,7 @@ final class HomeViewController: UIViewController {
     var presenter: HomePresenterInput?
     private let tableView = UITableView()
     private var launches: [Launch] = []
+    private var viewModel = HomeViewModel()
 
     init() {
         super.init(nibName: nil, bundle: nil)
