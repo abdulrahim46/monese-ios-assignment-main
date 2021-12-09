@@ -65,7 +65,7 @@ extension HomeViewController: UITableViewDataSource {
             withIdentifier: HomeTableViewCell.nameOfClass,
             for: indexPath
         ) as! HomeTableViewCell
-        cell.update(label: launch.name, time: launch.time.description)
+       // cell.update(label: launch.name, time: launch.time.description)
         return cell
     }
 }
@@ -73,6 +73,6 @@ extension HomeViewController: UITableViewDataSource {
 extension HomeViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        presenter?.selectedLaunch(flightNumber: launches[indexPath.row].flightNumber)
+       // presenter?.selectedLaunch(flightNumber: launches[indexPath.row].flightNumber)
     }
 }

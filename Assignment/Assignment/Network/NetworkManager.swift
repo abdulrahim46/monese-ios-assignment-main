@@ -35,7 +35,6 @@ class NetworkManager: DataProvider {
                 }
                 return
             }
-            
             do {
                 let result = try JSONDecoder().decode(expecting, from: data)
                 completion(.success(result))
@@ -44,8 +43,6 @@ class NetworkManager: DataProvider {
                 completion(.failure(error))
             }
         }
-        
         task.resume()
-        
     }
 }
