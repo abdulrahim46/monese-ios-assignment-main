@@ -82,6 +82,7 @@ extension HomeViewController: UITableViewDataSource {
         if let launch = viewModel.launches?[indexPath.row] {
             cell.configure(launch: launch)
         }
+        cell.selectionStyle = .none
         return cell
     }
 }
