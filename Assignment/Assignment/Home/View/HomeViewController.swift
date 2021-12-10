@@ -82,6 +82,7 @@ extension HomeViewController: UITableViewDataSource {
         if let launch = viewModel.launches?[indexPath.row] {
             cell.configure(launch: launch)
         }
+        cell.selectionStyle = .none
         return cell
     }
 }
@@ -91,7 +92,9 @@ extension HomeViewController: UITableViewDataSource {
 extension HomeViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        if let launch = viewModel.launches?[indexPath.row] {
+            AppNavigationHandler.goToLauchDetailScreen(launch: launch, from: self)
+        }
     }
     
     // tableview height for row
