@@ -1,6 +1,6 @@
 import UIKit
 
-final class HomeTableViewCell: UITableViewCell {
+class HomeTableViewCell: UITableViewCell {
 
     // view & properties
     private let label = UILabel()
