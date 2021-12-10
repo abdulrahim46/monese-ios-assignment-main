@@ -31,7 +31,7 @@ class HomeViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.isHidden = true
-        tableView.register(HomeTableViewCell.self, forCellReuseIdentifier: HomeTableViewCell.nameOfClass)
+        tableView.register(HomeTableViewCell.self, forCellReuseIdentifier: HomeTableViewCell.identifier)
         
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -78,7 +78,7 @@ extension HomeViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: HomeTableViewCell.nameOfClass, for: indexPath) as? HomeTableViewCell else { fatalError("Could not dequeue HomeTableViewCell") }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: HomeTableViewCell.identifier, for: indexPath) as? HomeTableViewCell else { fatalError("Could not dequeue HomeTableViewCell") }
         if let launch = viewModel.launches?[indexPath.row] {
             cell.configure(launch: launch)
         }
