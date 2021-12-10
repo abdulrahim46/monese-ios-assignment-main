@@ -1,39 +1,38 @@
 import UIKit
 
-final class HomeViewController: UIViewController {
-
-    var presenter: HomePresenterInput?
+class HomeViewController: UIViewController {
+    
+    //MARK: view & properties
+    
     private let tableView = UITableView()
     private var launches: [Launch] = []
     private var viewModel = HomeViewModel()
-
+    private(set) var loadingIndicator = UIActivityIndicatorView(style: .medium)
+    
     init() {
         super.init(nibName: nil, bundle: nil)
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
+    //MARK: Lifecycle methods
+    
     override func viewDidLoad() {
         view.backgroundColor = .white
-        presenter?.viewDidLoad()
+        setupActivityLoader()
         configureTableView()
+        fetchAllLaunches()
     }
-
+    
+    // setup tableview here
     private func configureTableView() {
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.estimatedRowHeight = 70
-        tableView.separatorStyle = .singleLine
-        tableView.alwaysBounceVertical = true
-        tableView.keyboardDismissMode = .onDrag
-
-        tableView.register(
-            HomeTableViewCell.self,
-            forCellReuseIdentifier: HomeTableViewCell.nameOfClass
-        )
-
+        tableView.isHidden = true
+        tableView.register(HomeTableViewCell.self, forCellReuseIdentifier: HomeTableViewCell.identifier)
+        
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -43,37 +42,60 @@ final class HomeViewController: UIViewController {
             tableView.rightAnchor.constraint(equalTo: view.rightAnchor)
         ])
     }
-}
-
-extension HomeViewController: HomePresenterOutput {
-
-    func updateListOfLaunches(list: [Launch]) {
-        launches = list
-        tableView.reloadData()
+    
+    // setting activity indicator here
+    private func setupActivityLoader() {
+        loadingIndicator.hidesWhenStopped = true
+        loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(loadingIndicator)
+        loadingIndicator.startAnimating()
+        NSLayoutConstraint.activate([
+            loadingIndicator.topAnchor.constraint(equalTo: view.topAnchor),
+            loadingIndicator.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ])
+    }
+    
+    //MARK: fetching data from view model
+    
+    private func fetchAllLaunches() {
+        viewModel.getAllLaunches(completion: { [weak self] response, err in
+            DispatchQueue.main.async {
+                self?.tableView.reloadData()
+                self?.tableView.isHidden = false
+                self?.loadingIndicator.stopAnimating()
+            }
+        })
     }
 }
 
-extension HomeViewController: UITableViewDataSource {
+//MARK: Datasources for tableview
 
+extension HomeViewController: UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        launches.count
+        return viewModel.launches?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let launch = launches[indexPath.row]
-        
-        let cell = tableView.dequeueReusableCell(
-            withIdentifier: HomeTableViewCell.nameOfClass,
-            for: indexPath
-        ) as! HomeTableViewCell
-       // cell.update(label: launch.name, time: launch.time.description)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: HomeTableViewCell.identifier, for: indexPath) as? HomeTableViewCell else { fatalError("Could not dequeue HomeTableViewCell") }
+        if let launch = viewModel.launches?[indexPath.row] {
+            cell.configure(launch: launch)
+        }
         return cell
     }
 }
 
-extension HomeViewController: UITableViewDelegate {
+//MARK: Delegate for tableview
 
+extension HomeViewController: UITableViewDelegate {
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-       // presenter?.selectedLaunch(flightNumber: launches[indexPath.row].flightNumber)
+        
+    }
+    
+    // tableview height for row
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 70
     }
 }

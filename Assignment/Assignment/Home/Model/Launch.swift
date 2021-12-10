@@ -9,7 +9,7 @@ struct Launch: Codable {
     enum CodingKeys: String, CodingKey {
         case flightNumber
         case name
-        case time
+        case time = "date_utc"
         case success
     }
 }

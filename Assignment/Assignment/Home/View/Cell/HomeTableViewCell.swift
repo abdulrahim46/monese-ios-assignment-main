@@ -1,7 +1,8 @@
 import UIKit
 
-final class HomeTableViewCell: UITableViewCell {
+class HomeTableViewCell: UITableViewCell {
 
+    // view & properties
     private let label = UILabel()
     private let time = UILabel()
 
@@ -9,12 +10,14 @@ final class HomeTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .blue
         configureSubview()
+        setOpaqueBackground()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // setting the view here
     private func configureSubview() {
         label.numberOfLines = 0
         time.numberOfLines = 0
@@ -32,8 +35,18 @@ final class HomeTableViewCell: UITableViewCell {
         ])
     }
 
-    func update(label: String, time: String) {
-        self.label.text = label
-        self.time.text = time
+    /// Configuring the view with data
+    func configure(launch: Launch) {
+        self.label.text = launch.name
+        self.time.text = launch.time
+    }
+}
+
+private extension HomeTableViewCell {
+    static let defaultBackgroundColor = UIColor.white
+
+    func setOpaqueBackground() {
+        alpha = 1.0
+        backgroundColor = .white
     }
 }
