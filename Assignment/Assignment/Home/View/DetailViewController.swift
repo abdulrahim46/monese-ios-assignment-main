@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SafariServices
 
 class DetailViewController: UIViewController {
     
@@ -38,17 +39,6 @@ class DetailViewController: UIViewController {
         return label
     }()
     
-    private let articleLinkLabel: UILabel = {
-        let label = UILabel()
-        label.backgroundColor = .clear
-        label.textAlignment = .center
-        label.text = "Article page"
-        label.textColor = .systemBlue
-        label.font = UIFont.preferredFont(forTextStyle: .caption1)
-        label.isUserInteractionEnabled = true
-        return label
-    }()
-    
     private let scrollview: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -72,23 +62,22 @@ class DetailViewController: UIViewController {
     
     // view setup here
     private func setupView() {
-        [rocketLabel, detailLabel, wikiLinkLabel, articleLinkLabel]
+        [rocketLabel, detailLabel, wikiLinkLabel]
             .forEach {
                 $0.numberOfLines = 0
                 $0.textAlignment = .center
             }
         wikiLinkLabel.tag = 1
-        articleLinkLabel.tag = 2
-        let tapgesture = UITapGestureRecognizer(target: self, action: #selector(tappedOnLabel(_:)))
+        let tapgesture = UITapGestureRecognizer(target: self, action: #selector(tappedOnArticleLabel(_:)))
+        let tapWikiGesture = UITapGestureRecognizer(target: self, action: #selector(tappedOnArticleLabel(_:)))
         tapgesture.numberOfTapsRequired = 1
+        tapWikiGesture.numberOfTapsRequired = 1
         wikiLinkLabel.addGestureRecognizer(tapgesture)
-        articleLinkLabel.addGestureRecognizer(tapgesture)
     }
     
     // setting constraints here
     private func setupConstraints() {
-        
-        [contentView, rocketLabel, detailLabel, wikiLinkLabel, articleLinkLabel]
+        [contentView, rocketLabel, detailLabel, wikiLinkLabel]
             .forEach {
                 $0.translatesAutoresizingMaskIntoConstraints = false
                 scrollview.addSubview($0)
@@ -97,17 +86,13 @@ class DetailViewController: UIViewController {
         let margin: CGFloat = 15.0
         NSLayoutConstraint.activate([
             wikiLinkLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            wikiLinkLabel.topAnchor.constraint(equalTo: articleLinkLabel.bottomAnchor, constant: 10),
-            
-            articleLinkLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: margin),
-            articleLinkLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -margin),
-            articleLinkLabel.topAnchor.constraint(equalTo: detailLabel.bottomAnchor, constant: 20),
-                        
+            wikiLinkLabel.topAnchor.constraint(equalTo: detailLabel.bottomAnchor, constant: margin),
+    
             detailLabel.leadingAnchor.constraint(equalTo: rocketLabel.leadingAnchor),
-            detailLabel.topAnchor.constraint(equalTo: rocketLabel.bottomAnchor, constant: 10),
+            detailLabel.topAnchor.constraint(equalTo: rocketLabel.bottomAnchor, constant: margin),
             detailLabel.trailingAnchor.constraint(equalTo: rocketLabel.trailingAnchor),
             
-            rocketLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            rocketLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: margin+5),
             rocketLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             rocketLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             
@@ -132,14 +117,12 @@ class DetailViewController: UIViewController {
     
     //MARK:- Action tappedOnLabel
     
-    @objc func tappedOnLabel(_ gesture: UITapGestureRecognizer) {
-        print("aaaadadadadad")
-//        if label.tag == 1 {
-//
-//        } else {
-//
-//        }
-        //Constants.openWithSafariVC(url: URL(string: viewModel.cat.wikipediaUrl ?? "")!, from: self)
+    @objc func tappedOnArticleLabel(_ gesture: UITapGestureRecognizer) {
+        if let article = launch?.links?.wikipedia {
+            SFSafariViewController.openWithSafariVC(url: URL(string: article)!, from: self)
+        } else {
+            AlertBuilder.failureAlertWithMessage(message: "No link found!")
+        }
     }
     
 }

@@ -22,10 +22,8 @@ struct Launch: Codable {
 
 struct Link: Codable {
     let wikipedia: String?
-    let article: String?
     
     enum CodingKeys: String, CodingKey {
         case wikipedia
-        case article
     }
 }
