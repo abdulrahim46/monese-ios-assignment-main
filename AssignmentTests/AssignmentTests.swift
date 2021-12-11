@@ -10,25 +10,47 @@ import XCTest
 @testable import Assignment
 
 class AssignmentTests: XCTestCase {
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    
+    var apiClient: ApiMockResources!
+    
+    override func setUp() {
+        super.setUp()
+        apiClient = ApiMockResources()
     }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    
+    
+    // test from launches from api
+    func test_fetch_launches_from_api() {
+        let fetcher = HomeViewModel(apiResource: apiClient)
+        
+        XCTAssertEqual(fetcher.launches?.count, nil, "starting with no data...")
+        let promise = XCTestExpectation(description: "loading data count...")
+        
+        fetcher.getAllLaunches(completion: { launch, error  in
+            promise.fulfill()
+            if let error = error {
+                XCTFail()
+                XCTAssertThrowsError(error)
+            } else {
+                if launch?.count == 147 {
+                    promise.fulfill()
+                }
+            }
+        })
+        wait(for: [promise], timeout: 2)
     }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    
+    //MARK:- Testing mock fetch cats
+    
+    func test_fetch_launches_from_json() {
+        let expectation = XCTestExpectation(description: "Auth Response Parse Expectation")
+        apiClient.fetchLaunchesfromJson(completion: { res in
+            XCTAssertNil(nil)
+            XCTAssertEqual(res.first?.name, "aaa")
+            XCTAssertEqual(res.count, 3)
+            XCTAssertEqual(res.last?.flightNumber, 3)
+            expectation.fulfill()
+        })
+        wait(for: [expectation], timeout: 2)
     }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
-
 }
