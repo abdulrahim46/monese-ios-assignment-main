@@ -8,6 +8,7 @@ class HomeViewController: UIViewController {
     private var launches: [Launch] = []
     private var viewModel = HomeViewModel()
     private(set) var loadingIndicator = UIActivityIndicatorView(style: .medium)
+    private let refreshControl = UIRefreshControl()
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -25,6 +26,7 @@ class HomeViewController: UIViewController {
         configureTableView()
         fetchAllLaunches()
         addNavigationItem()
+        swipeToRefresh()
     }
     
     //MARK: Setting the views
@@ -36,6 +38,12 @@ class HomeViewController: UIViewController {
             target: self,
             action: #selector(sortButtonAction)
         )
+    }
+    
+    private func swipeToRefresh() {
+        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
+        refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
+        tableView.addSubview(refreshControl)
     }
     
     // setup tableview here
@@ -76,6 +84,7 @@ class HomeViewController: UIViewController {
                 self?.tableView.reloadData()
                 self?.tableView.isHidden = false
                 self?.loadingIndicator.stopAnimating()
+                self?.refreshControl.endRefreshing()
             }
         })
     }
@@ -119,6 +128,10 @@ class HomeViewController: UIViewController {
         DispatchQueue.main.async { [weak self]  in
             self?.tableView.reloadData()
         }
+    }
+    
+    @objc func refresh(_ sender: AnyObject) {
+       fetchAllLaunches()
     }
 }
 
