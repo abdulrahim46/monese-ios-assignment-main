@@ -1,5 +1,7 @@
 Monese iOS home assignment template
 ==========
+![Platform](https://img.shields.io/badge/Platform-iOS-orange.svg)
+![Languages](https://img.shields.io/badge/Language-Swift-orange.svg)
 
 ## The purpose of this test
 
@@ -29,3 +31,46 @@ The application should display a loading indicator when it is fetching relevant 
 ### Submitting the homework
 
 Please send us the link to your private repository with the source code.
+
+## Installation
+- open Assignment.xcodeproj. 
+- Select the iphone simulator of your choice & run it. 
+- Tested on iOS 14.3, iOS 14.5, iOS 15 ( iphone SE, iphone 12 pro etc), XCode 13, 12.3.
+
+## Design Pattern: Model-View-ViewModel (MVVM)
+is a structural design pattern that separates objects into three distinct groups:
+- #### Models 
+  - hold application data. They’re usually structs or simple classes.
+- #### Views 
+  - display visual elements and controls on the screen. They’re typically subclasses of UIView.
+- #### View models
+  - transform model information into values that can be displayed on a view. They’re usually classes, so they can be passed around as references.
+  
+  ## Improvements / Need to be done
+  - Due to limited time constraints, wrote only few unit Tests and UI tests by using XCTest. Need to cover all unit test.
+  - UI improvements for HomeView
+  - Date format for the launches
+  - UI Improvements for DetailView
+  
+  ## Technology/Tools
+
+  - iOS 10
+  - Xcode 12.3
+  - Swift 5
+  - UIKit
+  - Github Actions CI
+  - Programmaticlly UI
+  - AutoLayout
+  - MVVM
+  - XCTestCase for unit tests and UI Tests.
+  - Xcode Instruments for memory leaks and allocations.
+  - Atomic git commit flow
+
+## 📱 Screenshots
+
+<p float="left"> 
+<img src="/Documentation/sim1.png" width="200">
+<img src="/Documentation/sim2.png" width="200">
+<img src="/Documentation/sim3.png" width="200">
+<img src="/Documentation/sim4.png" width="200">
+</p>
