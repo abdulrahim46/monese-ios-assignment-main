@@ -2,6 +2,7 @@ Monese iOS home assignment template
 ==========
 ![Platform](https://img.shields.io/badge/Platform-iOS-orange.svg)
 ![Languages](https://img.shields.io/badge/Language-Swift-orange.svg)
+[![CI](https://github.com/abdulrahim46/monese-ios-assignment-main/actions/workflows/CI.yml/badge.svg)](https://github.com/abdulrahim46/monese-ios-assignment-main/actions/workflows/CI.yml)
 
 ## The purpose of this test
 
