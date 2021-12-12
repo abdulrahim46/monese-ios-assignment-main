@@ -1,7 +1,7 @@
 import Foundation
 
 struct Launch: Codable {
-    let flightNumber: String?
+    let flightNumber: Int?
     let name: String?
     let time: String?
     let success: Bool?
@@ -10,7 +10,7 @@ struct Launch: Codable {
     let links: Link?
     
     enum CodingKeys: String, CodingKey {
-        case flightNumber
+        case flightNumber = "flight_number"
         case name
         case time = "date_utc"
         case success
