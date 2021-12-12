@@ -8,6 +8,7 @@ class HomeViewController: UIViewController {
     private var launches: [Launch] = []
     private var viewModel = HomeViewModel()
     private(set) var loadingIndicator = UIActivityIndicatorView(style: .medium)
+    private let refreshControl = UIRefreshControl()
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -24,6 +25,25 @@ class HomeViewController: UIViewController {
         setupActivityLoader()
         configureTableView()
         fetchAllLaunches()
+        addNavigationItem()
+        swipeToRefresh()
+    }
+    
+    //MARK: Setting the views
+    /// navigation right button setup
+    private func addNavigationItem() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            title: "Sort",
+            style: .plain,
+            target: self,
+            action: #selector(sortButtonAction)
+        )
+    }
+    
+    private func swipeToRefresh() {
+        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
+        refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
+        tableView.addSubview(refreshControl)
     }
     
     // setup tableview here
@@ -64,8 +84,54 @@ class HomeViewController: UIViewController {
                 self?.tableView.reloadData()
                 self?.tableView.isHidden = false
                 self?.loadingIndicator.stopAnimating()
+                self?.refreshControl.endRefreshing()
             }
         })
+    }
+    
+    
+    // MARK: handle actions
+    
+    /// sorting action on tap of specific sorts
+    @objc func sortButtonAction() {
+        /// create the alert
+        let alert = UIAlertController(title: "Sort", message: "", preferredStyle: UIAlertController.Style.alert)
+        
+        /// add the success actions (buttons)
+        alert.addAction(UIAlertAction(title: "Success", style: UIAlertAction.Style.default, handler: { [weak self] action in
+            self?.filterData(index: 0)
+        }))
+        
+        /// add the success actions (buttons)
+        alert.addAction(UIAlertAction(title: "Failure", style: UIAlertAction.Style.default, handler: { [weak self] action in
+            self?.filterData(index: 1)
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
+        
+        /// show the alert
+        DispatchQueue.main.async { [weak self]  in
+            self?.present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    /// filter data on select of specific sort from sort alert popup
+    private func filterData(index: Int) {
+        switch index {
+        case 0:
+            viewModel.launches?.removeAll(where: { $0.success == false || $0.success == nil })
+        case 1:
+            viewModel.launches?.removeAll(where: { $0.success == true || $0.success == nil })
+        default:
+            break
+        }
+        DispatchQueue.main.async { [weak self]  in
+            self?.tableView.reloadData()
+        }
+    }
+    
+    @objc func refresh(_ sender: AnyObject) {
+       fetchAllLaunches()
     }
 }
 
